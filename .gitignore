@@ -1,0 +1,17 @@
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+
+# Donnees lourdes ERA5
+apply/data/*
+!apply/data/.gitkeep
+*.grib
+*.nc
+*.zip
