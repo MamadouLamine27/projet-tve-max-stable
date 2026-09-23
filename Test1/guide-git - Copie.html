@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git · guide pas à pas pour débutant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0d1117;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
+            color: #e6edf3;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #161b22;
+            border-radius: 24px;
+            padding: 2rem 1.8rem;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f0883e, #f0b27a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.3px;
+        }
+
+        .sub {
+            color: #8b949e;
+            border-left: 3px solid #f0883e;
+            padding-left: 1rem;
+            margin: 0.75rem 0 1.8rem 0;
+            font-size: 1rem;
+        }
+
+        .card {
+            background: #21262d;
+            border-radius: 20px;
+            padding: 1.4rem 1.6rem;
+            margin-bottom: 1.8rem;
+            border: 1px solid #30363d;
+            transition: all 0.1s ease;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #f0b27a;
+        }
+
+        .card h2 span {
+            background: #2d333b;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.2rem 0.6rem;
+            border-radius: 40px;
+            color: #b1bac4;
+        }
+
+        .explanation {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+            color: #c9d1d9;
+        }
+
+        .code-block {
+            background: #0d1117;
+            border-radius: 14px;
+            padding: 0.9rem 1.2rem;
+            font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            border-left: 4px solid #f0883e;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0.8rem 0;
+            color: #e6edf3;
+        }
+
+        .inline-code {
+            background: #2d333b;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #f0883e;
+        }
+
+        .tip {
+            background: #2d1f1a;
+            border-radius: 14px;
+            padding: 0.8rem 1.2rem;
+            margin-top: 1rem;
+            border-left: 4px solid #f0883e;
+            font-size: 0.9rem;
+            color: #f0b27a;
+        }
+
+        .badge {
+            background: #1f6feb;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #30363d;
+            margin: 1rem 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #6e7681;
+        }
+
+        .workflow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: space-between;
+            background: #161b22;
+            padding: 1rem;
+            border-radius: 20px;
+            margin: 1.2rem 0;
+            border: 1px dashed #3b434c;
+        }
+
+        .workflow-step {
+            flex: 1;
+            text-align: center;
+            font-size: 0.8rem;
+            background: #21262d;
+            padding: 0.5rem;
+            border-radius: 40px;
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📘 Git · guide doux pour débutant</h1>
+        <div class="sub">
+            Pas de panique : Git est un outil pour sauvegarder ton code, voyager dans le temps et travailler en
+            équipe.<br>
+            Voici les seules commandes dont tu as besoin pour démarrer sereinement.
+        </div>
+
+        <!-- 🧠 analogie simple -->
+        <div class="card" style="background: #1a232f;">
+            <h2>🧠 L'analogie qui change tout</h2>
+            <div class="explanation">
+                Imagine que ton projet est un <strong>jeu vidéo</strong> :
+                <ul style="margin-left: 1.4rem; margin-top: 0.5rem;">
+                    <li>📁 <strong>Working directory</strong> → là où tu joues (tes modifications en cours)</li>
+                    <li>📦 <strong>Index (stage)</strong> → zone d’attente avant de sauvegarder</li>
+                    <li>💾 <strong>Commit</strong> → une sauvegarde définitive (avec un message)</li>
+                    <li>🌍 <strong>Remote (GitHub)</strong> → le cloud pour partager ou sauvegarder à distance</li>
+                </ul>
+            </div>
+            <div class="tip">
+                💡 Astuce : un commit, c’est comme une photo de ton projet à un instant T. Tu pourras toujours revenir
+                en arrière.
+            </div>
+        </div>
+
+        <!-- 1. Install + config -->
+        <div class="card">
+            <h2>🔧 1. Installation & identité <span>à faire une fois</span></h2>
+            <div class="explanation">
+                Avant tout, Git doit savoir qui tu es (ton nom et email apparaîtront dans l’historique).
+            </div>
+            <div class="code-block">
+                git config --global user.name "Ton Prénom Nom"<br>
+                git config --global user.email "ton.email@example.com"
+            </div>
+            <div class="tip">
+                ✅ Vérifie ta config : <span class="inline-code">git config --list</span>
+            </div>
+        </div>
+
+        <!-- 2. Créer un dépôt ou cloner -->
+        <div class="card">
+            <h2>📁 2. Démarrer un projet (2 façons)</h2>
+            <div class="explanation">
+                <span class="badge">OPTION A</span> <strong>Créer un dépôt local depuis zéro</strong>
+            </div>
+            <div class="code-block">
+                cd mon-dossier-projet<br>
+                git init
+            </div>
+            <div class="explanation" style="margin-top: 0.8rem;">
+                <span class="badge">OPTION B</span> <strong>Récupérer un projet déjà sur GitHub</strong>
+            </div>
+            <div class="code-block">
+                git clone https://github.com/utilisateur/nom-du-repo.git
+            </div>
+            <div class="tip">
+                🔁 <span class="inline-code">git clone</span> télécharge tout l’historique + crée automatiquement un
+                lien vers le dépôt distant.
+            </div>
+        </div>
+
+        <!-- 3. Cycle de vie : add / commit / status / log -->
+        <div class="card">
+            <h2>🔄 3. Le cycle quotidien (sauvegarder son travail)</h2>
+            <div class="workflow">
+                <div class="workflow-step">✏️ Modifier des fichiers</div>
+                <div class="workflow-step">➕ git add</div>
+                <div class="workflow-step">💾 git commit</div>
+                <div class="workflow-step">📤 git push</div>
+            </div>
+
+            <div class="explanation">
+                <strong>👉 Voir l’état des fichiers</strong> (modifiés, ajoutés, etc.)
+            </div>
+            <div class="code-block">
+                git status
+            </div>
+
+            <div class="explanation">
+                <strong>👉 Ajouter un fichier à la zone de préparation (stage)</strong>
+            </div>
+            <div class="code-block">
+                git add monfichier.js # un seul fichier<br>
+                git add . # tous les fichiers modifiés
+            </div>
+
+            <div class="explanation">
+                <strong>👉 Enregistrer la version (commit)</strong> – avec un message clair
+            </div>
+            <div class="code-block">
+                git commit -m "fix: correction du calcul de moyenne"
+            </div>
+
+            <div class="explanation">
+                <strong>👉 Voir l’historique des sauvegardes</strong>
+            </div>
+            <div class="code-block">
+                git log --oneline # version condensée, chaque commit a un identifiant
+            </div>
+            <div class="tip">
+                📝 Un bon message de commit : commence par un verbe (ajoute, corrige, améliore) et explique le POURQUOI.
+            </div>
+        </div>
+
+        <!-- 4. Travailler avec GitHub (remote) -->
+        <div class="card">
+            <h2>☁️ 4. Relier ton projet à GitHub (sauvegarde cloud)</h2>
+            <div class="explanation">
+                Après avoir créé un dépôt vide sur GitHub (sans README), lie-le à ton projet local :
+            </div>
+            <div class="code-block">
+                git remote add origin https://github.com/ton-compte/nom-projet.git<br>
+                git branch -M main<br>
+                git push -u origin main
+            </div>
+            <div class="explanation">
+                <strong>👉 Envoyer tes commits sur GitHub</strong> (après avoir fait <span class="inline-code">git
+                    commit</span>)
+            </div>
+            <div class="code-block">
+                git push
+            </div>
+            <div class="explanation">
+                <strong>👉 Récupérer les derniers changements depuis GitHub</strong> (important avant de commencer à
+                coder)
+            </div>
+            <div class="code-block">
+                git pull
+            </div>
+            <div class="tip">
+                🌟 <span class="inline-code">git pull</span> = télécharge les nouveautés + les fusionne avec ton travail
+                local. Fais-le souvent pour éviter les conflits.
+            </div>
+        </div>
+
+        <!-- 5. Branches : travailler sans peur -->
+        <div class="card">
+            <h2>🌿 5. Les branches : l’arme secrète</h2>
+            <div class="explanation">
+                Une branche, c’est une version parallèle de ton projet. Tu peux expérimenter sans casser la version
+                principale (<span class="inline-code">main</span>).
+            </div>
+            <div class="code-block">
+                git branch ma-fonctionnalité # crée une branche<br>
+                git checkout ma-fonctionnalité # bascule sur cette branche<br>
+                # (ou en une seule commande : git checkout -b ma-fonctionnalité)
+            </div>
+            <div class="explanation">
+                <strong>👉 Fusionner une branche dans main</strong> (une fois que la fonctionnalité est prête)
+            </div>
+            <div class="code-block">
+                git checkout main<br>
+                git merge ma-fonctionnalité
+            </div>
+            <div class="tip">
+                🧪 <strong>Bon réflexe</strong> : crée toujours une branche pour chaque nouvelle fonctionnalité ou
+                correction. Ta branche <span class="inline-code">main</span> restera propre.
+            </div>
+        </div>
+
+        <!-- 6. Résoudre un conflit (simple) -->
+        <div class="card">
+            <h2>⚠️ 6. Que faire en cas de conflit ?</h2>
+            <div class="explanation">
+                Un conflit arrive quand deux personnes modifient la même ligne d’un fichier. Pas de panique, Git te
+                guide.
+            </div>
+            <div class="code-block">
+                # après un git pull ou git merge, Git te dit : CONFLIT<br>
+                # Ouvre le fichier concerné, cherche les marqueurs :<br>
+                &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<br>
+                ton code actuel<br>
+                =======<br>
+                code de l'autre branche<br>
+                &gt;&gt;&gt;&gt;&gt;&gt;&gt;<br>
+                # Corrige manuellement (garde ce qui doit rester) puis :<br>
+                git add fichier_conflit.js<br>
+                git commit -m "résolution conflit"
+            </div>
+            <div class="tip">
+                🛠️ Petit conseil : avant de <span class="inline-code">git pull</span>, assure-toi d’avoir commité ton
+                travail. Utilise <span class="inline-code">git status</span> pour voir où tu en es.
+            </div>
+        </div>
+
+        <!-- 7. Annuler / revenir en arrière (sécurité) -->
+        <div class="card">
+            <h2>⏪ 7. Annuler des modifications (sans peur)</h2>
+            <div class="explanation">
+                <strong>👉 Annuler les modifications non encore ajoutées (dans le working directory)</strong>
+            </div>
+            <div class="code-block">
+                git restore monfichier.js
+            </div>
+            <div class="explanation">
+                <strong>👉 Désajouter un fichier du stage (git add par erreur)</strong>
+            </div>
+            <div class="code-block">
+                git restore --staged monfichier.js
+            </div>
+            <div class="explanation">
+                <strong>👉 Revenir au dernier commit (perdre toutes les modifications locales)</strong>
+            </div>
+            <div class="code-block">
+                git reset --hard HEAD
+            </div>
+            <div class="tip">
+                ⚠️ <span class="inline-code">git reset --hard</span> est définitif. Utilise-le seulement si tu es sûr de
+                vouloir tout jeter. Sinon, préfère <span class="inline-code">git stash</span> (range temporairement ton
+                travail).
+            </div>
+        </div>
+
+        <!-- 8. La commande magique : git stash -->
+        <div class="card">
+            <h2>🧹 8. Ranger temporairement son travail : git stash</h2>
+            <div class="explanation">
+                Tu es en plein milieu d’une modification, mais tu dois changer de branche ou tirer les dernières mises à
+                jour ?<br>
+                <span class="inline-code">git stash</span> met de côté tes changements en cours (proprement).
+            </div>
+            <div class="code-block">
+                git stash # range les modifications non commitées<br>
+                git stash pop # les réapplique et supprime le stash
+            </div>
+            <div class="tip">
+                📦 Utile quand tu veux <span class="inline-code">git pull</span> sans perdre ton travail en cours.
+            </div>
+        </div>
+
+        <!-- 9. Pull Requests : collaborer proprement -->
+        <div class="card">
+            <h2>🔀 9. Pull Requests : le cœur du travail en équipe <span>GitHub</span></h2>
+            <div class="explanation">
+                En équipe, on ne pousse (presque) jamais directement sur <span class="inline-code">main</span>. À la
+                place, on propose ses changements via une <strong>Pull Request (PR)</strong> : une demande de fusion que
+                les autres peuvent relire, commenter et approuver <em>avant</em> qu’elle rejoigne le projet.
+            </div>
+            <div class="workflow">
+                <div class="workflow-step">🌿 Branche</div>
+                <div class="workflow-step">💾 Commits</div>
+                <div class="workflow-step">📤 Push branche</div>
+                <div class="workflow-step">🔀 Ouvrir la PR</div>
+                <div class="workflow-step">👀 Review</div>
+                <div class="workflow-step">✅ Merge</div>
+            </div>
+            <div class="explanation">
+                <strong>👉 1. Crée ta branche et pousse-la sur GitHub</strong>
+            </div>
+            <div class="code-block">
+                git checkout -b ajout-page-contact<br>
+                # ... tu codes ...<br>
+                git add .<br>
+                git commit -m "feat: ajoute la page de contact"<br>
+                git push -u origin ajout-page-contact
+            </div>
+            <div class="explanation">
+                <strong>👉 2. Ouvre la Pull Request</strong> — après ton push, GitHub affiche un bouton <span
+                    class="inline-code">Compare &amp; pull request</span>. Clique dessus, écris un titre clair + une
+                description (le POURQUOI et comment tester), puis crée la PR.
+            </div>
+            <div class="explanation">
+                <strong>👉 3. La review</strong> — tes collègues lisent le code, laissent des commentaires ligne par
+                ligne, et choisissent <span class="inline-code">Approve</span> (c’est bon) ou <span
+                    class="inline-code">Request changes</span> (à corriger). Tu ajustes en poussant de nouveaux commits
+                sur la même branche : la PR se met à jour toute seule.
+            </div>
+            <div class="explanation">
+                <strong>👉 4. Le merge</strong> — une fois approuvée, on clique sur <span class="inline-code">Merge pull
+                    request</span>. Ta branche peut ensuite être supprimée sans risque.
+            </div>
+            <div class="tip">
+                🔗 Astuce : écris <span class="inline-code">Fixes #42</span> dans la description de la PR pour fermer
+                automatiquement l’issue n°42 dès que la PR est fusionnée.
+            </div>
+        </div>
+
+        <!-- 10. Fork : contribuer à un projet qu'on ne possède pas -->
+        <div class="card">
+            <h2>🍴 10. Le fork : contribuer au projet des autres <span>open source</span></h2>
+            <div class="explanation">
+                Tu veux participer à un projet où tu n’as pas les droits d’écriture (un projet open source, par
+                exemple) ? Tu fais un <strong>fork</strong> : une copie personnelle du dépôt sur ton propre compte
+                GitHub.
+            </div>
+            <div class="explanation">
+                <span class="badge">ÉTAPE 1</span> Clique sur <span class="inline-code">Fork</span> sur GitHub, puis
+                clone <em>ta</em> copie :
+            </div>
+            <div class="code-block">
+                git clone https://github.com/ton-compte/le-projet.git<br>
+                cd le-projet
+            </div>
+            <div class="explanation">
+                <span class="badge">ÉTAPE 2</span> Ajoute le dépôt d’origine comme <span
+                    class="inline-code">upstream</span> pour rester à jour :
+            </div>
+            <div class="code-block">
+                git remote add upstream https://github.com/projet-original/le-projet.git<br>
+                git fetch upstream<br>
+                git merge upstream/main # récupère les nouveautés du projet original
+            </div>
+            <div class="explanation">
+                <span class="badge">ÉTAPE 3</span> Crée ta branche, pousse-la sur <em>ton</em> fork, puis ouvre une Pull
+                Request vers le projet original. Les mainteneurs la relisent et décident de l’intégrer.
+            </div>
+            <div class="tip">
+                🧭 <span class="inline-code">origin</span> = ton fork (tu écris dessus). <span
+                    class="inline-code">upstream</span> = le projet original (tu lis dessus). Vérifie avec <span
+                    class="inline-code">git remote -v</span>.
+            </div>
+        </div>
+
+        <!-- 11. Diriger un projet : Issues & tableau Kanban -->
+        <div class="card">
+            <h2>🗂️ 11. Diriger un projet : Issues &amp; Kanban <span>sur GitHub</span></h2>
+            <div class="explanation">
+                Git gère le <em>code</em>, mais <strong>GitHub</strong> gère l’<em>organisation</em>. Ces outils vivent
+                dans l’interface web (aucune commande à taper) et c’est là que se pilote un projet en équipe.
+            </div>
+            <div class="explanation">
+                <strong>🐛 Les Issues</strong> — une issue = une tâche, un bug ou une idée. Chacune a un titre, une
+                description, et peut recevoir :
+                <ul style="margin-left: 1.4rem; margin-top: 0.5rem;">
+                    <li>🏷️ des <strong>labels</strong> (<span class="inline-code">bug</span>, <span
+                            class="inline-code">enhancement</span>, <span class="inline-code">good first issue</span>)
+                    </li>
+                    <li>👤 un·e <strong>assigné·e</strong> (la personne qui s’en occupe)</li>
+                    <li>🎯 un <strong>milestone</strong> (regroupe des issues vers un objectif, ex : « version 1.0 »)</li>
+                </ul>
+            </div>
+            <div class="explanation">
+                <strong>📋 Le tableau Projects</strong> — un Kanban intégré à GitHub. Tu déplaces tes issues et PR d’une
+                colonne à l’autre :
+            </div>
+            <div class="workflow">
+                <div class="workflow-step">📥 To do</div>
+                <div class="workflow-step">🔨 In progress</div>
+                <div class="workflow-step">👀 In review</div>
+                <div class="workflow-step">✅ Done</div>
+            </div>
+            <div class="tip">
+                🔗 Relie le code au suivi : dans un commit ou une PR, écris <span class="inline-code">closes #12</span>
+                et l’issue n°12 se ferme automatiquement au merge. Toute l’équipe voit qui fait quoi et où en est le
+                projet.
+            </div>
+        </div>
+
+        <!-- 12. Bonnes pratiques pour diriger sereinement -->
+        <div class="card">
+            <h2>🧭 12. Bonnes pratiques pour mener une équipe</h2>
+            <div class="explanation">
+                <strong>🔒 Protège la branche main</strong> — dans les réglages GitHub (<em>Settings → Branches</em>),
+                exige une PR + au moins une review avant tout merge sur <span class="inline-code">main</span>. Ainsi
+                personne ne casse la version principale par accident.
+            </div>
+            <div class="explanation">
+                <strong>✍️ Adopte une convention de commit</strong> — des messages lisibles par toute l’équipe :
+            </div>
+            <div class="code-block">
+                feat: nouvelle fonctionnalité<br>
+                fix: correction de bug<br>
+                docs: documentation<br>
+                refactor: réécriture sans changer le comportement<br>
+                test: ajout ou correction de tests
+            </div>
+            <div class="explanation">
+                <strong>🙈 Crée un fichier <span class="inline-code">.gitignore</span></strong> — pour ne JAMAIS envoyer
+                les fichiers inutiles ou secrets sur GitHub :
+            </div>
+            <div class="code-block">
+                node_modules/<br>
+                .env # ⚠️ ne commit jamais tes mots de passe / clés API<br>
+                *.log<br>
+                dist/
+            </div>
+            <div class="explanation">
+                <strong>🏷️ Marque les versions avec des tags</strong> — pour livrer des versions officielles (releases) :
+            </div>
+            <div class="code-block">
+                git tag v1.0.0<br>
+                git push origin v1.0.0
+            </div>
+            <div class="tip">
+                📁 Un projet bien dirigé a souvent un <span class="inline-code">README.md</span> (présentation), un <span
+                    class="inline-code">CONTRIBUTING.md</span> (règles pour contribuer) et un <span
+                    class="inline-code">CODEOWNERS</span> (qui relit quoi). Ça guide les nouveaux arrivants tout seul.
+            </div>
+        </div>
+
+        <!-- 13. Tableau récap des commandes essentielles -->
+        <div class="card">
+            <h2>📋 Mémo visuel des commandes quotidiennes</h2>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 12px; margin-top: 12px;">
+                <div><span class="inline-code">git status</span> → état des fichiers</div>
+                <div><span class="inline-code">git add .</span> → préparer tous les fichiers</div>
+                <div><span class="inline-code">git commit -m "msg"</span> → sauvegarder</div>
+                <div><span class="inline-code">git log --oneline</span> → historique</div>
+                <div><span class="inline-code">git push</span> → envoyer sur GitHub</div>
+                <div><span class="inline-code">git pull</span> → récupérer les nouveautés</div>
+                <div><span class="inline-code">git branch</span> → lister les branches</div>
+                <div><span class="inline-code">git checkout -b nom</span> → créer + basculer</div>
+                <div><span class="inline-code">git merge branche</span> → fusionner</div>
+                <div><span class="inline-code">git restore fichier</span> → annuler modifs</div>
+                <div><span class="inline-code">git stash / pop</span> → ranger temporairement</div>
+                <div><span class="inline-code">git remote -v</span> → voir l’URL GitHub liée</div>
+                <div><span class="inline-code">git push -u origin branche</span> → publier une branche</div>
+                <div><span class="inline-code">git fetch</span> → récupérer sans fusionner</div>
+                <div><span class="inline-code">git tag v1.0.0</span> → marquer une version</div>
+            </div>
+            <hr>
+            <div class="tip">
+                🎯 La règle d’or : <strong>commit souvent, avec des messages clairs, et pull avant de commencer à
+                    coder.</strong>
+            </div>
+        </div>
+
+        <!-- 10. Exemple de flow typique (histoire) -->
+        <div class="card">
+            <h2>🚀 Exemple concret : une journée de travail avec Git</h2>
+            <div class="explanation">
+                <ol style="margin-left: 1.4rem;">
+                    <li><span class="inline-code">git pull</span> → je récupère le dernier code de l’équipe</li>
+                    <li><span class="inline-code">git checkout -b nouvelle-fonction</span> → je crée une branche pour ma
+                        fonction</li>
+                    <li>Je code, je sauvegarde : <span class="inline-code">git add .</span> puis <span
+                            class="inline-code">git commit -m "ajout du formulaire"</span></li>
+                    <li>Je recommence (ajout/commit) plusieurs fois</li>
+                    <li>Quand c’est prêt : <span class="inline-code">git push -u origin nouvelle-fonction</span> → je
+                        publie ma branche</li>
+                    <li>J’ouvre une <strong>Pull Request</strong> sur GitHub, un·e collègue relit, puis on fusionne dans
+                        <span class="inline-code">main</span></li>
+                </ol>
+            </div>
+            <div class="tip">
+                🌈 <strong>Ne pas avoir peur :</strong> tant que tu as commité, tu ne perds rien. Git garde chaque
+                version.
+            </div>
+        </div>
+
+        <!-- 11. Ressources et erreurs fréquentes -->
+        <div class="card">
+            <h2>💬 Erreurs débutantes (et solutions)</h2>
+            <div class="explanation">
+                <ul style="margin-left: 1.4rem;">
+                    <li><strong>❌ "fatal: not a git repository"</strong> → tu n’as pas fait <span
+                            class="inline-code">git init</span> ou tu n’es pas dans le bon dossier.</li>
+                    <li><strong>❌ "Please tell me who you are"</strong> → oubli de <span class="inline-code">git config
+                            --global user.name/email</span></li>
+                    <li><strong>❌ "rejected" lors du push</strong> → quelqu’un a poussé avant toi. Fais <span
+                            class="inline-code">git pull</span>, règle les conflits, puis repush.</li>
+                    <li><strong>❌ "detached HEAD"</strong> → tu es sur un ancien commit. Tape <span
+                            class="inline-code">git checkout main</span> pour revenir.</li>
+                </ul>
+            </div>
+            <div class="tip">
+                📚 Besoin d’aide sur une commande ? <span class="inline-code">git --help</span> ou <span
+                    class="inline-code">git add --help</span> affiche la documentation.
+            </div>
+        </div>
+
+        <footer>
+            ⚡ Guide pensée pour les vrais débutants – utilise <span class="inline-code">git status</span> aussi souvent
+            que tu respires, ça t’évitera 90% des surprises.
+        </footer>
+    </div>
+</body>
+
+</html>
