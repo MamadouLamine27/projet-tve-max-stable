@@ -1,6 +1,8 @@
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[french]{babel}
+% --- style.sty (XeLaTeX + français) ---
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\usepackage{polyglossia}        % l'équivalent de babel pour XeLaTeX
+\setmainlanguage{french}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{geometry}
 \geometry{margin=2.5cm}
@@ -13,4 +15,5 @@
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
 \newcommand{\LN}{L_N}
